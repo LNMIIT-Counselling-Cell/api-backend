@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const User = mongoose.model('User');
 const Outpass = mongoose.model('Outpass');
 const requireLogin = require('../middlewares/requireLogin');
 const { generate_token } = require('../services/outpassService');
@@ -32,5 +31,16 @@ router.post('/generateoutpass', requireLogin, (req, res) => {
       console.error("Outpass save error: " + err)
     })
 });
+
+router.get('/previousoutpass', requireLogin, (req, res) => {
+  Outpass.find({ name: req.user._id })
+    .then((outpass_record) => {
+      console.log("Outpass_record fetch success: " + outpass_record);
+      res.json({ outpass_record });
+    })
+    .catch((err) => {
+      console.error("Outpass_record fetch error: " + err);
+    })
+})
 
 module.exports = router;

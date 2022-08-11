@@ -17,8 +17,8 @@ router.get('/protected', requireLogin, (req, res) => {
 
 router.post('/signup', (req, res) => {
   console.log(req.body);
-  const { name, email, password } = req.body;
-  if (!name || !email || !password) {
+  const { name, email, password, role } = req.body;
+  if (!name || !email || !password || !role) {
     // code 422 - server has understood the request but couldn't process the same
     return res.status(422).json({ error: "Please add all the fields" });
   }
@@ -35,7 +35,8 @@ router.post('/signup', (req, res) => {
           const user = new User({
             name: name, // if key and value are both same then we can condense it to just name, email, etc.
             email: email,
-            password: hashedPassword
+            password: hashedPassword,
+            role: role
           });
 
           user.save()
@@ -70,7 +71,7 @@ router.post('/signin', (req, res) => {
             // res.json({ message: "Successfully Signed In" });
             const { _id, name, email } = savedUser
             const token = jwt.sign({ _id: savedUser._id }, JWT_SECRET);
-            res.json({ token: token, user: {_id, name, email} });
+            res.json({ token: token, user: {_id, name, email, role} });
           }
           else {
             return res.status(422).json({ error: "Invalid email or password" });

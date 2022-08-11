@@ -34,6 +34,11 @@ const outpassSchema = new mongoose.Schema({
   },
   token: {
     type: String
+  },
+  status: {
+    type: String,
+    default: "Pending",
+    required: true
   }
 }, {
   // will automatically give a timestamp of createdAt and updatedAt
