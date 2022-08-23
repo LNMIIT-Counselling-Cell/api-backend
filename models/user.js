@@ -15,7 +15,8 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    required: true
+    required: true,
+    default: 'Student'
   }
 }, {
   // will automatically give a timestamp of createdAt and updatedAt

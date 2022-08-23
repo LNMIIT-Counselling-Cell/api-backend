@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Outpass = mongoose.model('Outpass');
 const requireLogin = require('../middlewares/requireLogin');
-const { generate_token } = require('../services/outpassService');
+const generate_token = require('../services/outpassService')
 
 router.post('/generateoutpass', requireLogin, (req, res) => {
   const { hostel, roomno, purpose, transport, from_time, to_time } = req.body;
@@ -14,7 +14,7 @@ router.post('/generateoutpass', requireLogin, (req, res) => {
   const uniqueToken = generate_token(16);
 
   const outpass_record = new Outpass({
-    name: req.user,
+    user: req.user,
     hostel: hostel,
     roomno: roomno,
     purpose: purpose,
