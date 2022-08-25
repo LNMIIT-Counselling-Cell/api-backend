@@ -5,6 +5,7 @@ const User = mongoose.model('User');
 const Outpass = mongoose.model('Outpass');
 const requireLogin = require('../middlewares/requireLogin');
 
+
 router.get('/pendingoutpasses', requireLogin, (req, res) => {
   if (req.user.role == 'Admin') {
     Outpass.find({ status: "Pending" })
