@@ -18,8 +18,8 @@ router.get("/protected", requireLogin, (req, res) => {
 router.post("/signup", (req, res) => {
   console.log(req.body);
   const { userInfo } = req.body;
-  const name = userInfo.name;
-  const email = userInfo.email;
+  const name = userInfo.user.name;
+  const email = userInfo.user.email;
   if (!name || !email) {
     // code 422 - server has understood the request but couldn't process the same
     return res.status(422).json({ error: "Please add all the fields" });
@@ -30,11 +30,12 @@ router.post("/signup", (req, res) => {
     .then((savedUser) => {
       if (savedUser) {
         return res
-          .status(422)
+          .status(421)
           .json({ error: "User with that email already exists." });
       }
 
       const user = new User({
+        id: userInfo.user.id,
         name: name, // if key and value are both same then we can condense it to just name, email, etc.
         email: email,
       });
@@ -42,7 +43,7 @@ router.post("/signup", (req, res) => {
       user
         .save()
         .then((user) => {
-          res.json({ message: "User Created Successfully!", userData: user });
+          res.status(200).json({ message: "User Created Successfully!", userData: user });
         })
         .catch((err) => {
           console.log(`Error saving user - ${err}`);
