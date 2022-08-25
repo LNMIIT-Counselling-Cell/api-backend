@@ -30,7 +30,7 @@ router.post("/signup", (req, res) => {
     .then((savedUser) => {
       if (savedUser) {
         return res
-          .status(421)
+          .status(422)
           .json({ error: "User with that email already exists." });
       }
 
