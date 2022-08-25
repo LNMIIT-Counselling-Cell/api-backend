@@ -17,14 +17,16 @@ router.get("/protected", requireLogin, (req, res) => {
 
 router.post("/signup", (req, res) => {
   console.log(req.body);
-  const { user } = req.body;
-  if (!user.name || !user.email) {
+  const { userInfo } = req.body;
+  const name = userInfo.name;
+  const email = userInfo.email;
+  if (!name || !email) {
     // code 422 - server has understood the request but couldn't process the same
     return res.status(422).json({ error: "Please add all the fields" });
   }
   // res.json({ message: "Successfully Posted" });
 
-  User.findOne({ email: user.email })
+  User.findOne({ email: email })
     .then((savedUser) => {
       if (savedUser) {
         return res
@@ -33,8 +35,8 @@ router.post("/signup", (req, res) => {
       }
 
       const user = new User({
-        name: user.name, // if key and value are both same then we can condense it to just name, email, etc.
-        email: user.email,
+        name: name, // if key and value are both same then we can condense it to just name, email, etc.
+        email: email,
       });
 
       user
