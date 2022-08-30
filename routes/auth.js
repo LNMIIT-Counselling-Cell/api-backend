@@ -30,8 +30,10 @@ router.post("/signup", (req, res) => {
     .then((savedUser) => {
       if (savedUser) {
         return res
-          .status(422)
-          .json({ error: "User with that email already exists." });
+          .status(200)
+          .json({ msg: "User with that email already exists. abb wapis entry de rahe", userData: savedUser });
+        // .status(422)
+        // .json({ error: "User with that email already exists." });
       }
 
       const user = new User({

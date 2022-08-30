@@ -1,6 +1,6 @@
 const generate_token = (length) => {
   //edit the token allowed characters
-  var a = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+  var a = "1234567890".split("");
   var b = [];
   for (var i = 0; i < length; i++) {
     var j = (Math.random() * (a.length - 1)).toFixed(0);
