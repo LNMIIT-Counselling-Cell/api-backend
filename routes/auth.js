@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../keys");
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
+const Admin = mongoose.model("Admin");
 const requireLogin = require("../middlewares/requireLogin");
 
 router.get("/", (req, res) => {
@@ -56,8 +57,48 @@ router.post("/signup", (req, res) => {
     });
 });
 
+router.post("/adminsignup", (req, res) => {
+  console.log(req.body);
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
+    // code 422 - server has understood the request but couldn't process the same
+    return res.status(422).json({ error: "Please add all the fields" });
+  }
+  // res.json({ message: "Successfully Posted" });
+
+  Admin.findOne({ email: email })
+    .then((savedAdmin) => {
+      if (savedAdmin) {
+        return res
+          .status(422)
+          .json({ error: "Admin with that email already exists. Please Sign in." });
+      }
+
+      bcrypt.hash(password, 16)
+        .then((hashedPassword) => {
+          const admin = new Admin({
+            name: name, // if key and value are both same then we can condense it to just name, email, etc.
+            email: email,
+            password: hashedPassword
+          });
+
+          admin
+            .save()
+            .then((admin) => {
+              res.status(200).json({ message: "Admin Created Successfully!", adminData: admin });
+            })
+            .catch((err) => {
+              console.log(`Error saving admin - ${err}`);
+            });
+        })
+    })
+    .catch((err) => {
+      console.log(`Error in email findOne - ${err}`);
+    });
+});
+
 // exclusive for web Client
-router.post("/signin", (req, res) => {
+router.post("/adminsignin", (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -74,9 +115,9 @@ router.post("/signin", (req, res) => {
         // doMatch is a boolean value
         if (doMatch) {
           // res.json({ message: "Successfully Signed In" });
-          const { _id, name, email, role } = savedUser;
-          const token = jwt.sign({ _id: savedUser._id }, JWT_SECRET);
-          res.json({ token: token, user: { _id, name, email, role } });
+          const { _id, name, email } = savedAdmin;
+          const token = jwt.sign({ _id: savedAdmin._id }, JWT_SECRET);
+          res.json({ token: token, admin: { _id, name, email } });
         } else {
           return res.status(422).json({ error: "Invalid email or password" });
         }

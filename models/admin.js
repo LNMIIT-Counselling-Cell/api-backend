@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    required: true
-  },
+const adminSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
   },
   email: {
+    type: String,
+    required: true
+  },
+  password: {
     type: String,
     required: true
   }
@@ -21,4 +21,4 @@ const userSchema = new mongoose.Schema({
   }
 })
 
-mongoose.model("User", userSchema);
+mongoose.model("Admin", adminSchema);
