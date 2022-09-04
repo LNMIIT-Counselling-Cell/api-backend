@@ -7,6 +7,7 @@ const requireAdminLogin = require('../middlewares/requireAdminLogin');
 
 router.get('/pendingoutpasses', requireAdminLogin, (req, res) => {
   Outpass.find({ status: "Pending" })
+    .populate("user", "_id name email")
     .then((outpass_record) => {
       console.log("Pending Outpass_record fetch success: " + outpass_record);
       res.json({ outpass_record });

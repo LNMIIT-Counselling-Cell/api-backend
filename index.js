@@ -18,8 +18,12 @@ app.use(express.json());
 
 require('./models/user');
 require('./models/outpass');
+require('./models/admin');
+require('./models/post');
 db.model("User");
 db.model("Outpass")
+db.model("Admin")
+db.model("Post")
 app.use(require('./routes/auth'));
 app.use(require('./routes/outpass'));
 app.use(require('./routes/admin'));

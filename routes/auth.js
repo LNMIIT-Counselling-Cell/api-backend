@@ -57,6 +57,7 @@ router.post("/signup", (req, res) => {
     });
 });
 
+// exclusive for web Client
 router.post("/adminsignup", (req, res) => {
   console.log(req.body);
   const { name, email, password } = req.body;
@@ -99,18 +100,19 @@ router.post("/adminsignup", (req, res) => {
 
 // exclusive for web Client
 router.post("/adminsignin", (req, res) => {
+  console.log(req.body)
   const { email, password } = req.body;
 
   if (!email || !password) {
     res.status(422).json({ error: "Please enter email or password" });
   }
 
-  User.findOne({ email: email }).then((savedUser) => {
-    if (!savedUser) {
-      return res.status(422).json({ error: "Invalid email or password" });
+  Admin.findOne({ email: email }).then((savedAdmin) => {
+    if (!savedAdmin) {
+      return res.status(422).json({ error: "Invalid email or password 1" });
     }
     bcrypt
-      .compare(password, savedUser.password)
+      .compare(password, savedAdmin.password)
       .then((doMatch) => {
         // doMatch is a boolean value
         if (doMatch) {
@@ -119,7 +121,7 @@ router.post("/adminsignin", (req, res) => {
           const token = jwt.sign({ _id: savedAdmin._id }, JWT_SECRET);
           res.json({ token: token, admin: { _id, name, email } });
         } else {
-          return res.status(422).json({ error: "Invalid email or password" });
+          return res.status(422).json({ error: "Invalid email or password 2" });
         }
       })
       .catch((err) => {
