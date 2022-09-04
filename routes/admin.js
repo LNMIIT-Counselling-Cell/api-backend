@@ -17,6 +17,18 @@ router.get('/pendingoutpasses', requireAdminLogin, (req, res) => {
     })
 });
 
+router.get('/approvedoutpasses', requireAdminLogin, (req, res) => {
+  Outpass.find({ status: "Approved" })
+    .populate("user", "_id name email")
+    .then((outpass_record) => {
+      console.log("Approved Outpass_record fetch success: " + outpass_record);
+      res.json({ outpass_record });
+    })
+    .catch((err) => {
+      console.error("Approved Outpass_record fetch error: " + err);
+    })
+});
+
 router.post('/approveoutpass/:outpassid', requireAdminLogin, (req, res) => {
   Outpass.findByIdAndUpdate(req.params.outpassid, {
     status: "Approved"
