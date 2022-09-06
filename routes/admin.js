@@ -55,7 +55,7 @@ router.post('/uploadpost', requireAdminLogin, (req, res) => {
     description: description,
     imageurl: imageurl,
     organization: organization,
-    orgicon: orgiconurl
+    orgiconurl: orgiconurl
   })
 
   post_record.save().then((result) => {
@@ -75,4 +75,20 @@ router.get('/allposts', requireAdminLogin, (req, res) => {
       console.log(err)
     })
 })
+
+router.delete('/deletepost/:postId', requireAdminLogin, (req, res) => {
+  Post.findByIdAndRemove(req.params.postId)
+    .then(post => {
+      if (!post) {
+        return res.status(422).json({ error: 'post not found' });
+      }
+      else {
+        res.json({ post: post });
+      }
+    })
+    .catch(err => {
+      console.err("error:", err);
+    })
+})
+
 module.exports = router;
