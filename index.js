@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //cors
 const cors = require("cors");
+const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
 app.use(cors());
 
 app.use(express.json());
@@ -97,6 +98,10 @@ app.post("/getValidToken", async (req, res) => {
     res.json({ error: error.message });
   }
 });
+
+
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`The Server is running on port: ${PORT}`);
