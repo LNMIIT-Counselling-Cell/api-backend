@@ -27,6 +27,7 @@ db.model("Post")
 app.use(require('./routes/auth'));
 app.use(require('./routes/outpass'));
 app.use(require('./routes/admin'));
+app.use(require('./routes/post'));
 
 const oauth2Client = new google.auth.OAuth2(
   '891305350714-becnblrdvdvu6og7qi46f919rckcuev8.apps.googleusercontent.com',
