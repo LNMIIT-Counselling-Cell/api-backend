@@ -61,6 +61,7 @@ app.post("/handleGoogleRedirect", (req, res) => {
     console.log("server 53 | token", tokens);
     if (err) {
       console.log("server 52 | error", err);
+      throw new Error("Issue with login try again ");
       // throw new Error("Issue with Login", err.message);
     }
     setTimeout(() => {
